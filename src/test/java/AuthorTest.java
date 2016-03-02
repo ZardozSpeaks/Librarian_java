@@ -4,7 +4,6 @@ import java.util.List;
 
 public class AuthorTest {
 
-
   @Rule
   public DatabaseRule database = new DatabaseRule();
 
@@ -36,22 +35,27 @@ public class AuthorTest {
     myAuthor.save();
 
     myAuthor.addBook(myBook);
-    List savedBooks = myAuthor.getBooks();
+    List<Book> savedBooks = myAuthor.getBooks();
     assertEquals(savedBooks.size(), 1);
   }
 
-  // @Test
-  // public void findByAuthor_returnsBooksByAuthor() {
-  //   Book newBook1 = new Book("J.R.R. Tolkien", "Fellowship of the Ring");
-  //   Book newBook2 = new Book("J.R.R. Tolkien", "The Two Towers");
-  //   Book newBook3 = new Book("J.R.R. Tolkien", "Return of the King");
-  //   newBook1.save();
-  //   newBook2.save();
-  //   newBook3.save();
-  //   List<Book> bookList = Book.findByAuthor("J.R.R. Tolkien");
-  //   assertTrue(bookList.contains(newBook1));
-  //   assertTrue(bookList.contains(newBook2));
-  //   assertTrue(bookList.contains(newBook3));
-  // }
+  @Test
+  public void findByAuthor_returnsBooksByAuthor() {
+    Book newBook1 = new Book("Fellowship of the Ring");
+    Book newBook2 = new Book("The Two Towers");
+    Book newBook3 = new Book("Return of the King");
+    Author testAuthor = new Author("J.R.R. Tolkien");
+    testAuthor.save();
+    newBook1.save();
+    newBook2.save();
+    newBook3.save();
+    newBook1.addAuthor(testAuthor);
+    newBook2.addAuthor(testAuthor);
+    newBook3.addAuthor(testAuthor);
+    assertTrue((testAuthor.getBooks()).contains(newBook1));
+    assertTrue((testAuthor.getBooks()).contains(newBook2));
+    assertTrue((testAuthor.getBooks()).contains(newBook3));
+
+  }
 
 }

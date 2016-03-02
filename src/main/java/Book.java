@@ -1,6 +1,6 @@
 import java.util.List;
 import org.sql2o.*;
-import java.util.ArrayList;
+
 
 public class Book {
   private String author;
@@ -68,24 +68,13 @@ public class Book {
     }
   }
 
-  public ArrayList<Author> getAuthors() {
+  public List<Author> getAuthors() {
     try(Connection con = DB.sql2o.open()){
-      String sql = "SELECT author_id FROM books_authors WHERE book_id = :book_id";
-      List<Integer> authorIds = con.createQuery(sql)
-        .addParameter("book_id", this.getId())
-        .executeAndFetch(Integer.class);
-
-      ArrayList<Author> authors = new ArrayList<Author>();
-
-      for (Integer authorId : authorIds) {
-        String authorQuery = "SELECT * FROM authors WHERE id = :authorId";
-        Author author = con.createQuery(authorQuery)
-          .addParameter("authorId", authorId)
-          .executeAndFetchFirst(Author.class);
-        authors.add(author);
+       String sql = "SELECT authors.* FROM books JOIN books_authors ON (books.id = books_authors.book_id) JOIN authors ON (books_authors.author_id = authors.id) WHERE book_id=:id";
+      return con.createQuery(sql)
+        .addParameter("id", this.id)
+        .executeAndFetch(Author.class);
       }
-      return authors;
-    }
   }
 
   public static List<Book> findByTitle(String title) {

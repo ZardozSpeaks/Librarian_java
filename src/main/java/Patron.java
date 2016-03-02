@@ -3,21 +3,21 @@ import java.util.ArrayList;
 import org.sql2o.*;
 
 
-public class Author {
+public class Patron {
   private String name;
   private int id;
 
-  public Author(String name) {
+  public Patron(String name) {
     this.name = name;
   }
 
   @Override
-  public boolean equals(Object otherAuthor){
-    if (!(otherAuthor instanceof Author)) {
+  public boolean equals(Object otherPatron){
+    if (!(otherPatron instanceof Patron)) {
       return false;
     } else {
-      Author newAuthor = (Author) otherAuthor;
-      return this.getName().equals(newAuthor.getName());
+      Patron newPatron = (Patron) otherPatron;
+      return this.getName().equals(newPatron.getName());
     }
   }
 
@@ -38,7 +38,7 @@ public class Author {
   //CREATE//
   public void save() {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "INSERT INTO authors (name) VALUES (:name)";
+      String sql = "INSERT INTO patrons (name) VALUES (:name)";
       this.id = (int) con.createQuery(sql, true)
         .addParameter("name", this.name)
         .executeUpdate()
@@ -47,29 +47,31 @@ public class Author {
   }
 
   //READ//
-  public static List<Author> all(){
+  public static List<Patron> all(){
     try(Connection con = DB.sql2o.open()) {
-      String sql = "SELECT * FROM authors";
+      String sql = "SELECT * FROM patrons";
       return con.createQuery(sql)
-        .executeAndFetch(Author.class);
+        .executeAndFetch(Patron.class);
     }
   }
 
   public List<Book> getBooks() {
     try(Connection con = DB.sql2o.open()){
-      String sql = "SELECT books.* FROM authors JOIN books_authors ON (books_authors.author_id = authors.id) JOIN books ON (books.id = books_authors.book_id) WHERE author_id=:id";
+      String sql = "SELECT books.* FROM patrons JOIN checkouts ON (checkouts.patron_id = patrons.id) JOIN books ON (books.id = checkouts.book_id) WHERE patron_id=:id";
       return con.createQuery(sql)
         .addParameter("id", this.id)
         .executeAndFetch(Book.class);
       }
   }
 
+
   //UPDATE//
-  public void addBook(Book book) {
+
+  public void addCheckout(Book book) {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "INSERT INTO books_authors (author_id, book_id) VALUES (:author_id, :book_id);";
+      String sql = "INSERT INTO checkouts (patron_id, book_id) VALUES (:patron_id, :book_id);";
       con.createQuery(sql)
-        .addParameter("author_id", this.getId())
+        .addParameter("patron_id", this.getId())
         .addParameter("book_id", book.getId())
         .executeUpdate();
     }
