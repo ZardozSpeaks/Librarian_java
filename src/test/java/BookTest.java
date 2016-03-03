@@ -2,6 +2,9 @@ import org.junit.*;
 import static org.junit.Assert.*;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
+
+
 
 
 public class BookTest {
@@ -58,7 +61,7 @@ public class BookTest {
     newBook.save();
     newBook.setCopies(5);
     newBook.updateCheckout();
-    assertEquals(5, newBook.getCopy());
+    assertEquals(5, newBook.getCopies());
   }
 
   @Test

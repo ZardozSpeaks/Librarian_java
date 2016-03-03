@@ -3,6 +3,7 @@ import static org.junit.Assert.*;
 import java.util.List;
 import java.util.Date;
 
+
 public class PatronTest {
 
   @Rule
@@ -28,46 +29,35 @@ public class PatronTest {
   }
 
   @Test
-  public void getBooks_returnsAllBooks_ArrayList() {
-    Book myBook = new Book("Moby Dick");
-    myBook.save();
+  public void getCopies_returnsAllCopies_ArrayList() {
+    Copy myCopies = new Copy(1);
+    myCopies.save();
 
     Patron myPatron = new Patron("Jimmy");
     myPatron.save();
 
-    myPatron.addCheckout(myBook);
-    List<Book> savedBooks = myPatron.getBooks();
-    assertEquals(savedBooks.size(), 1);
+    myPatron.addCheckout(myCopies);
+    List<Copy> savedCopies = myPatron.getCopies();
+    assertEquals(savedCopies.size(), 1);
   }
 
   @Test
   public void findByPatron_returnsBooksByPatron() {
-    Book newBook1 = new Book("Fellowship of the Ring");
-    Book newBook2 = new Book("The Two Towers");
-    Book newBook3 = new Book("Return of the King");
+    Copy newCopy1 = new Copy(1);
     Patron testPatron = new Patron("Jimmy");
     testPatron.save();
-    newBook1.save();
-    newBook2.save();
-    newBook3.save();
-    testPatron.addCheckout(newBook1);
-    testPatron.addCheckout(newBook2);
-    testPatron.addCheckout(newBook3);
-    assertTrue((testPatron.getBooks()).contains(newBook1));
-    assertTrue((testPatron.getBooks()).contains(newBook2));
-    assertTrue((testPatron.getBooks()).contains(newBook3));
+    newCopy1.save();
+    testPatron.addCheckout(newCopy1);
+    assertTrue((testPatron.getCopies()).contains(newCopy1));
   }
 
   @Test
   public void addCheckout_returnsCheckOutDate() {
-    Book newBook = new Book("This Thing of Darkness");
+    Copy newCopy = new Copy(1);
     Patron newPatron = new Patron("Jimmy");
-    newBook.save();
+    newCopy.save();
     newPatron.save();
-    newBook.setCheckoutDate();
-    newBook.updateCheckout();
-    newPatron.addCheckout(newBook);
-    assertEquals(newBook.getCheckoutDate(), "2016-03-02");
+    assertEquals(newCopy.getCheckoutDate(), "2016-03-03");
   }
 
 }

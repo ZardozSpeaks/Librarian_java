@@ -6,8 +6,7 @@ import java.util.Date;
 public class Book {
   private String title;
   private int id;
-  private int copy;
-  private Date checkoutDate;
+  private int copies;
 
   public Book (String title) {
     this.title = title;
@@ -33,27 +32,20 @@ public class Book {
     return id;
   }
 
-  public int getCopy() {
-    return copy;
-  }
-
-  public Date getCheckoutDate() {
-    return checkoutDate;
+  public int getCopies() {
+    return copies;
   }
 
   //SETTER METHODS//
 
   public void setCopies(int newCopy) {
-    this.copy = newCopy;
+    this.copies = newCopy;
   }
 
   public void setTitle(String newTitle) {
     this.title = newTitle;
   }
 
-  public void setCheckoutDate() {
-    this.checkoutDate = new Date();
-  }
 
   //CREATE//
   public void save() {
@@ -63,6 +55,12 @@ public class Book {
         .addParameter("title", this.title)
         .executeUpdate()
         .getKey();
+    }
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE books SET copies = copies - 1 WHERE id = :id";
+      con.createQuery(sql)
+      .addParameter("id", this.id)
+      .executeUpdate();
     }
   }
 
@@ -117,10 +115,9 @@ public class Book {
 
   public void updateCheckout() {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "UPDATE books SET copies =:copies, checkout_date=:checkout_date WHERE id=:id";
+      String sql = "UPDATE books SET copies =:copies WHERE id=:id";
         con.createQuery(sql)
-        .addParameter("copies", this.copy)
-        .addParameter("checkout_date", this.checkoutDate)
+        .addParameter("copies", this.copies)
         .addParameter("id", this.id)
         .executeUpdate();
     }

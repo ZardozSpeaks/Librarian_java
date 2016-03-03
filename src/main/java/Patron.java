@@ -4,6 +4,7 @@ import org.sql2o.*;
 import java.util.Date;
 
 
+
 public class Patron {
   private String name;
   private int id;
@@ -56,24 +57,24 @@ public class Patron {
     }
   }
 
-  public List<Book> getBooks() {
+  public List<Copy> getCopies() {
     try(Connection con = DB.sql2o.open()){
-      String sql = "SELECT books.* FROM patrons JOIN checkouts ON (checkouts.patron_id = patrons.id) JOIN books ON (books.id = checkouts.book_id) WHERE patron_id=:id";
+      String sql = "SELECT copies.* FROM patrons JOIN checkouts ON (checkouts.patron_id = patrons.id) JOIN copies ON (copies.id = checkouts.copy_id) WHERE patron_id=:id";
       return con.createQuery(sql)
         .addParameter("id", this.id)
-        .executeAndFetch(Book.class);
+        .executeAndFetch(Copy.class);
       }
   }
 
 
   //UPDATE//
-  public void addCheckout(Book book) {
+  public void addCheckout(Copy copy) {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "INSERT INTO checkouts (patron_id, book_id, checkout_date) VALUES (:patron_id, :book_id, :checkout_date);";
+      String sql = "INSERT INTO checkouts (patron_id, copy_id, checkout_date) VALUES (:patron_id, :copy_id, :checkout_date);";
       con.createQuery(sql)
         .addParameter("patron_id", this.getId())
-        .addParameter("book_id", book.getId())
-        .addParameter("checkout_date", book.getCheckoutDate())
+        .addParameter("copy_id", copy.getId())
+        .addParameter("checkout_date", copy.getCheckoutDate())
         .executeUpdate();
     }
   }
