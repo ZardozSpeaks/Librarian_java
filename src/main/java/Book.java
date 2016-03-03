@@ -1,11 +1,13 @@
 import java.util.List;
 import org.sql2o.*;
+import java.util.Date;
 
 
 public class Book {
-  private String author;
   private String title;
   private int id;
+  private int copy;
+  private Date checkoutDate;
 
   public Book (String title) {
     this.title = title;
@@ -31,11 +33,26 @@ public class Book {
     return id;
   }
 
+  public int getCopy() {
+    return copy;
+  }
+
+  public Date getCheckoutDate() {
+    return checkoutDate;
+  }
+
   //SETTER METHODS//
 
+  public void setCopies(int newCopy) {
+    this.copy = newCopy;
+  }
 
   public void setTitle(String newTitle) {
     this.title = newTitle;
+  }
+
+  public void setCheckoutDate() {
+    this.checkoutDate = new Date();
   }
 
   //CREATE//
@@ -93,6 +110,17 @@ public class Book {
       String sql = "UPDATE books SET title =:title WHERE id=:id";
         con.createQuery(sql)
         .addParameter("title", this.title)
+        .addParameter("id", this.id)
+        .executeUpdate();
+    }
+  }
+
+  public void updateCheckout() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE books SET copies =:copies, checkout_date=:checkout_date WHERE id=:id";
+        con.createQuery(sql)
+        .addParameter("copies", this.copy)
+        .addParameter("checkout_date", this.checkoutDate)
         .addParameter("id", this.id)
         .executeUpdate();
     }

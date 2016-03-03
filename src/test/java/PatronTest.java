@@ -1,6 +1,7 @@
 import org.junit.*;
 import static org.junit.Assert.*;
 import java.util.List;
+import java.util.Date;
 
 public class PatronTest {
 
@@ -55,6 +56,18 @@ public class PatronTest {
     assertTrue((testPatron.getBooks()).contains(newBook1));
     assertTrue((testPatron.getBooks()).contains(newBook2));
     assertTrue((testPatron.getBooks()).contains(newBook3));
+  }
+
+  @Test
+  public void addCheckout_returnsCheckOutDate() {
+    Book newBook = new Book("This Thing of Darkness");
+    Patron newPatron = new Patron("Jimmy");
+    newBook.save();
+    newPatron.save();
+    newBook.setCheckoutDate();
+    newBook.updateCheckout();
+    newPatron.addCheckout(newBook);
+    assertEquals(newBook.getCheckoutDate(), "2016-03-02");
   }
 
 }

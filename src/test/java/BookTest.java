@@ -53,6 +53,15 @@ public class BookTest {
   }
 
   @Test
+  public void updateCopy_updatesNumberOfBooks() {
+    Book newBook = new Book("Lord Of The Rings Trilogy");
+    newBook.save();
+    newBook.setCopies(5);
+    newBook.updateCheckout();
+    assertEquals(5, newBook.getCopy());
+  }
+
+  @Test
   public void delete_removesBookFromTheDatabase() {
     Book newBook = new Book("Being and Nothingness");
     newBook.save();

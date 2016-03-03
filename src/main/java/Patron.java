@@ -1,6 +1,7 @@
 import java.util.List;
 import java.util.ArrayList;
 import org.sql2o.*;
+import java.util.Date;
 
 
 public class Patron {
@@ -66,15 +67,14 @@ public class Patron {
 
 
   //UPDATE//
-
   public void addCheckout(Book book) {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "INSERT INTO checkouts (patron_id, book_id) VALUES (:patron_id, :book_id);";
+      String sql = "INSERT INTO checkouts (patron_id, book_id, checkout_date) VALUES (:patron_id, :book_id, :checkout_date);";
       con.createQuery(sql)
         .addParameter("patron_id", this.getId())
         .addParameter("book_id", book.getId())
+        .addParameter("checkout_date", book.getCheckoutDate())
         .executeUpdate();
     }
   }
-
 }
