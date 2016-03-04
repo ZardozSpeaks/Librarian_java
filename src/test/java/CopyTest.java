@@ -35,12 +35,12 @@ public class CopyTest {
 
   @Test
   public void findByDueDate_returnsCopiesByDueDate() {
-    Copy newCopy1 = new Copy(1);
+    Copy newCopy = new Copy(1);
     Patron testPatron = new Patron("Jimmy");
     testPatron.save();
-    newCopy1.save();
+    newCopy.save();
     testPatron.addCheckout(newCopy1);
-    assertTrue((newCopy1.getDueDate()).equals("2016-03-13"));
+    assertTrue(((Copy.find(1)).getDueDate()).equals("2016-03-13"));
   }
 
   @Test
